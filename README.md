@@ -3,19 +3,25 @@
 <b>Greetings! This is my first API. It's built using ASP.NET Core with Minimal API, implementing RESTful architecture.</b>
 <br>The API is managing viewing and storing people, their interests and corresponding links using HTTP verbs.
 
-### ER (Entity Relationship) diagram to illustrate appropriate normalization
+<br>
+
+### ER (Entity Relationship) diagram 
+Illustrates appropriate normalization
+<br>
 
 ![ER-Diagram](/Diagrams/ER_diagram_Mini_project-API_dark.png)
 
+<br>
 
-### UML (Unified Modeling Language) diagram for graphical representations
+### UML (Unified Modeling Language) diagram
+Graphical representation of the structure, behaviors and interactions.
 
 ![UML-Diagram](/Diagrams/UML_diagram_MiniAPIproject_dark.png)
 
 
 
 
-## Endpoints
+## Endpoints and how to use them
 
 
 
@@ -74,7 +80,6 @@ GET /interests
 Replace *{personId}* with the desired persons ID.
 ```
 GET /interests/{personId}
-
 ```
 <br>
 
@@ -91,7 +96,6 @@ POST /people/{personId}/interests/{interestId}
 <br>Replace *{personId}* with the desired persons ID.
 ```
 GET /people/{personId}/interests
-
 ```
 
 
@@ -106,5 +110,4 @@ POST /people/{personId}/interests/{interestId}/addLink
 {
 	"Url": "https://en.wikipedia.org/wiki/Chemistry"
 }
-
 ```
