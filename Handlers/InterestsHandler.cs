@@ -71,7 +71,7 @@ namespace Mini_project_API.Handlers
                 // Check if provided interest already exists
                 if (context.Interests.Any(i => i.Name == interestName.Name))
                 {
-                    return Results.NotFound("Interest already exists.");
+                    return Results.Conflict($"Interest '{interestName.Name}' already exists.");
                 }
 
                 context.Interests
