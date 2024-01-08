@@ -10,7 +10,7 @@ namespace Mini_project_API.Handlers
 {
     public class PeopleHandler
     {
-        public static IResult GetPeople(ApplicationContext context, SearchDto userQuery)
+        public static IResult GetPeople(ApplicationContext context, SearchDto? userQuery)
         {
             if (userQuery != null)
             {
@@ -26,13 +26,19 @@ namespace Mini_project_API.Handlers
                     })
                     .ToArray();
 
+            if (unfilteredResult.Length < 1)
+            {
+                // If no interests are found
+                return Results.NotFound("No people found.");
+            }
+
             return Results.Json(unfilteredResult);
         }
 
         private static IResult UseSearch(ApplicationContext context, SearchDto userQuery)
         {
             PeopleViewModel[] filteredResult = context.People
-                .Where(p => p.FirstName.StartsWith(userQuery.SearchString))
+                .Where(p => p.FirstName.StartsWith(userQuery.Search))
                 .Select(p => new PeopleViewModel()
                 {
                     Id = p.Id,
@@ -86,10 +92,12 @@ namespace Mini_project_API.Handlers
             {
                 FirstName = person.FirstName,
                 LastName = person.LastName,
-                Phone = person.Phone
+                PhoneNumber = person.PhoneNumber
             });
+
             context.SaveChanges();
-            return Results.StatusCode((int)HttpStatusCode.Created);
+
+            return Results.Ok(new { Message = "Person successfully added." } );
         }
 
         public static IResult GetPersonInterestLinks(ApplicationContext context, int personId)
@@ -98,6 +106,12 @@ namespace Mini_project_API.Handlers
                                 .Where(il => il.Person.Id == personId)
                                 .Select(il => il.Url)
                                 .ToArray();
+
+            if (result.Length < 1)
+            {
+                // If no interests are found
+                return Results.NotFound( new { Message = "No links found." } );
+            }
 
             return Results.Json(result);
         }
@@ -115,7 +129,7 @@ namespace Mini_project_API.Handlers
                 if (person == null)
                 {
                     // Display if no person or interest with provided Id is found
-                    return Results.NotFound($"Person with ID: {personId} not found.");
+                    return Results.NotFound(new { Message = $"Person with ID: {personId} not found." } );
                 }
 
                 var hierarchical = new PersonHierarchicalViewModel()
@@ -129,8 +143,6 @@ namespace Mini_project_API.Handlers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error {ex.Message} occurred while processing your request.");
-
                 return Results.StatusCode((int)HttpStatusCode.InternalServerError);
             }
         }

@@ -14,13 +14,14 @@ namespace Mini_project_API
             var app = builder.Build();
 
             // Welcome message and instructions
-            app.MapGet("/", () => "Welcome to The Famous Interests API!");
+            app.MapGet("/", () => "Welcome to The Interests API!" +
+            "\n\nPlease see README for documentation on how to use this API here: https://github.com/filip-io/Mini_project-API");
 
             // People
-            app.MapPost("/people/", PeopleHandler.GetPeople);
+            app.MapPost("/people", PeopleHandler.GetPeople);
             app.MapGet("/people/pageNumber/{pageNumber}/pageSize/{pageSize}", PeopleHandler.GetPeoplePagination);
             app.MapGet("/people/{personId}/hierarchical", PeopleHandler.GetPersonHierarchical);
-            app.MapPost("/people/add/", PeopleHandler.AddPerson);
+            app.MapPost("/people/add", PeopleHandler.AddPerson);
 
             // Interests
             app.MapGet("/interests", InterestsHandler.GetInterests);
@@ -28,8 +29,8 @@ namespace Mini_project_API
             app.MapPost("/people/{personId}/interests/{interestId}", InterestsHandler.AddPersonToInterest);
 
             // Links
-            app.MapPost("/people/{personId}/interests/{interestId}/addLink", InterestsHandler.AddInterestLink);
             app.MapGet("/people/{personId}/interests", PeopleHandler.GetPersonInterestLinks);
+            app.MapPost("/people/{personId}/interests/{interestId}/addLink", InterestsHandler.AddInterestLink);
 
             app.Run();
         }

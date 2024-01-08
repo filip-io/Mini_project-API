@@ -2,6 +2,6 @@
 {
     public class SearchDto
     {
-        public string SearchString { get; set; }
+        public string? Search { get; set; }
     }
 }

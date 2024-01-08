@@ -3,6 +3,7 @@ using Mini_project_API.Data;
 using Mini_project_API.Models;
 using Mini_project_API.Models.DTO;
 using Mini_project_API.Models.ViewModels;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 
@@ -20,6 +21,11 @@ namespace Mini_project_API.Handlers
                     Description = i.Description,
                 })
                 .ToArray();
+
+            if (result.Length < 1)
+                // If no interests are found
+                return Results.NotFound("No interests found.");
+
             return Results.Json(result);
         }
 
@@ -133,12 +139,12 @@ namespace Mini_project_API.Handlers
                 }
 
                 // Check if provided URL already exists for the specific person and interest
-                var urlExistsForPersonAndInterest = context.InterestLinks
+                var urlExists = context.InterestLinks
                                                            .Any(u => u.Person.Id == personId
                                                                   && u.Interest.Id == interestId
                                                                   && u.Url == interestLink.Url);
 
-                if (urlExistsForPersonAndInterest)
+                if (urlExists)
                 {
                     return Results.BadRequest("The URL already exists for the chosen interest.");
                 }
