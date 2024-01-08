@@ -73,15 +73,15 @@ namespace Mini_project_API.Handlers
             int skipCount = (pageNumber - 1) * pageSize;
 
             PeopleViewModel[] result = context.People
-                .OrderBy(p => p.Id)
-                .Skip(skipCount)
-                .Take(pageSize)
-                .Select(p => new PeopleViewModel()
-                {
-                    Id = p.Id,
-                    Name = $"{p.FirstName} {p.LastName}",
-                })
-                .ToArray();
+                                              .OrderBy(p => p.Id)
+                                              .Skip(skipCount)
+                                              .Take(pageSize)
+                                              .Select(p => new PeopleViewModel()
+                                              {
+                                                  Id = p.Id,
+                                                  Name = $"{p.FirstName} {p.LastName}",
+                                              })
+                                              .ToArray();
 
             return Results.Json(result);
         }
@@ -141,7 +141,7 @@ namespace Mini_project_API.Handlers
 
                 return Results.Json(hierarchical);
             }
-            catch (Exception ex)
+            catch
             {
                 return Results.StatusCode((int)HttpStatusCode.InternalServerError);
             }

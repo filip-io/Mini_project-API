@@ -24,28 +24,27 @@ namespace Mini_project_API.Handlers
 
             if (result.Length < 1)
                 // If no interests are found
-                return Results.NotFound("No interests found.");
+                return Results.NotFound(new { Message = "No interests found." } );
 
             return Results.Json(result);
         }
 
         public static IResult GetPersonInterests(ApplicationContext context, int personId)
         {
-            var person =
-                context.People
-                       .Where(p => p.Id == personId)
-                       .Include(p => p.Interests)
-                       .FirstOrDefault();
+            var person = context.People
+                                .Where(p => p.Id == personId)
+                                .Include(p => p.Interests)
+                                .FirstOrDefault();
 
             if (person == null)
             {
                 // If no person with provided Id is found
-                return Results.NotFound($"No person with ID: {personId} found.");
+                return Results.NotFound(new { Message = $"No person with ID: {personId} found." });
             }
 
             if (person.Interests == null)
                 // If person with provided Id has no interest
-                return Results.NotFound($"No interest found for person with ID: {person.Id}.");
+                return Results.NotFound(new { Message = $"No interest found for person with ID: {person.Id}." } );
 
             var interests = person.Interests
                                   .Select(i => new InterestPersonViewModel()
@@ -53,12 +52,12 @@ namespace Mini_project_API.Handlers
                                       Name = i.Name,
                                       Description = i.Description,
                                   })
-            .ToArray();
+                                  .ToArray();
 
             if (interests.Length == 0)
             {
                 // Display if no interest with provided Id is found e.g. the returned array is empty
-                return Results.NotFound($"No interests found for person with ID: {personId}.");
+                return Results.NotFound(new { Message = $"No interests found for person with ID: {personId}." } );
             }
 
             return Results.Json(interests);
@@ -71,7 +70,7 @@ namespace Mini_project_API.Handlers
                 // Check if provided interest already exists
                 if (context.Interests.Any(i => i.Name == interestName.Name))
                 {
-                    return Results.Conflict($"Interest '{interestName.Name}' already exists.");
+                    return Results.Conflict(new { Error = $"Interest '{interestName.Name}' already exists." } );
                 }
 
                 context.Interests
@@ -83,7 +82,7 @@ namespace Mini_project_API.Handlers
 
                 context.SaveChanges();
 
-                return Results.Ok($"New interest '{interestName.Name}' successfully added.");
+                return Results.Ok(new { Message = $"New interest '{interestName.Name}' successfully added." } );
             }
             catch
             {
@@ -113,24 +112,22 @@ namespace Mini_project_API.Handlers
                 if (person == null)
                 {
                     // Display if no person or interest with provided Id is found
-                    return Results.NotFound($"Person with ID: {personId} not found.");
+                    return Results.NotFound(new { Message = $"Person with ID: {personId} not found." } );
                 }
 
                 if (person.Interests.Contains(interest))
                 {
-                    return Results.Conflict("Person already has that interest. Please choose another interest.");
+                    return Results.Conflict(new { Message = "Person already has that interest. Please choose another interest." } );
                 }
 
                 person.Interests.Add(interest);
                 context.SaveChanges();
 
-                return Results.Ok($"Person with ID: {personId} successfully added to interest with ID: {interestId}");
+                return Results.Ok(new { Message = $"Person with ID: {personId} successfully added to interest with ID: {interestId}" } );
 
             }
-            catch (Exception ex)
+            catch
             {
-                Console.WriteLine($"Error {ex.Message} occurred while processing your request.");
-
                 return Results.StatusCode((int)HttpStatusCode.InternalServerError);
             }
         }
@@ -146,7 +143,7 @@ namespace Mini_project_API.Handlers
 
                 if (person == null)
                 {
-                    return Results.NotFound($"No person with ID: {personId} found.");
+                    return Results.NotFound(new { Message = $"No person with ID: {personId} found." } );
                 }
 
                 var interest = context.Interests
@@ -155,25 +152,28 @@ namespace Mini_project_API.Handlers
 
                 if (interest == null)
                 {
-                    return Results.NotFound($"No interest with ID: {interestId} found.");
+                    return Results.NotFound(new { Message = $"No interest with ID: {interestId} found." } );
                 }
 
                 // Check if the person has the interest with the provided interestId
                 if (!person.Interests.Any(i => i.Id == interestId))
                 {
-                    return Results.BadRequest($"Person with ID: {personId} does not have the interest with ID: {interestId}. " +
-                                              $"Please add the interest to the person before adding the link.");
+                    return Results.BadRequest(new
+                    {
+                        Message = $"Person with ID: {personId} does not have the interest with ID: {interestId}. " +
+                                  $"Please add the interest to the person before adding the link."
+                    });
                 }
 
                 // Check if provided URL already exists for the specific person and interest
                 var urlExists = context.InterestLinks
-                                                           .Any(u => u.Person.Id == personId
-                                                                  && u.Interest.Id == interestId
-                                                                  && u.Url == interestLink.Url);
+                                       .Any(u => u.Person.Id == personId
+                                              && u.Interest.Id == interestId
+                                              && u.Url == interestLink.Url);
 
                 if (urlExists)
                 {
-                    return Results.BadRequest("The URL already exists for the chosen interest.");
+                    return Results.BadRequest(new { Error = "The URL already exists for the chosen interest." } );
                 }
 
                 context.InterestLinks
@@ -186,12 +186,10 @@ namespace Mini_project_API.Handlers
 
                 context.SaveChanges();
 
-                return Results.Ok($"New link {interestLink.Url} successfully added to person with ID: {personId}.");
+                return Results.Ok(new { Message = $"New link {interestLink.Url} successfully added to person with ID: {personId}." } );
             }
-            catch (Exception ex)
+            catch 
             {
-                Console.WriteLine($"Error {ex.Message} occurred while processing your request.");
-
                 return Results.StatusCode((int)HttpStatusCode.InternalServerError);
             }
         }
