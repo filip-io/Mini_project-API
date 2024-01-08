@@ -53,7 +53,7 @@ GET /people/{personId}/hierarchical
 
 <br>
 
-#### **Add person to database** 
+#### **Add person to the database** 
 Provide the mandatory info in the request body to add a new person to the database.
 ```
 POST /people/add/
@@ -75,6 +75,18 @@ GET /interests
 ```
 <br>
 
+#### **Add interest to the database**
+Provide necessary info to the request body
+```
+POST /interests
+
+Using JSON:
+{
+	"name": "Science",
+	"description": "Science is a rigorous, systematic endeavor that builds and organizes knowledge."
+}
+```
+<br>
 
 #### **Get a specific persons interests**
 Replace *{personId}* with the desired persons ID.
