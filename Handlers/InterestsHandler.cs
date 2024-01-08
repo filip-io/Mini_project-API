@@ -49,10 +49,10 @@ namespace Mini_project_API.Handlers
 
             var interests = person.Interests
                                   .Select(i => new InterestPersonViewModel()
-            {
-                Name = i.Name,
-                Description = i.Description,
-            })
+                                  {
+                                      Name = i.Name,
+                                      Description = i.Description,
+                                  })
             .ToArray();
 
             if (interests.Length == 0)
@@ -62,6 +62,33 @@ namespace Mini_project_API.Handlers
             }
 
             return Results.Json(interests);
+        }
+
+        public static IResult AddInterest(ApplicationContext context, InterestDto interestName)
+        {
+            try
+            {
+                // Check if provided interest already exists
+                if (context.Interests.Any(i => i.Name == interestName.Name))
+                {
+                    return Results.NotFound("Interest already exists.");
+                }
+
+                context.Interests
+                    .Add(new Interest()
+                    {
+                        Name = interestName.Name,
+                        Description = interestName.Description,
+                    });
+
+                context.SaveChanges();
+
+                return Results.Ok($"New interest '{interestName.Name}' successfully added.");
+            }
+            catch
+            {
+                return Results.StatusCode((int)HttpStatusCode.InternalServerError);
+            }
         }
 
         public static IResult AddPersonToInterest(ApplicationContext context, int personId, int interestId)
@@ -156,7 +183,7 @@ namespace Mini_project_API.Handlers
                         Interest = interest,
                         Person = person
                     });
-                    
+
                 context.SaveChanges();
 
                 return Results.Ok($"New link {interestLink.Url} successfully added to person with ID: {personId}.");
@@ -167,6 +194,6 @@ namespace Mini_project_API.Handlers
 
                 return Results.StatusCode((int)HttpStatusCode.InternalServerError);
             }
-        }        
+        }
     }
 }
