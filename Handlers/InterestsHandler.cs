@@ -24,7 +24,7 @@ namespace Mini_project_API.Handlers
 
             if (result.Length < 1)
                 // If no interests are found
-                return Results.NotFound(new { Message = "No interests found." } );
+                return Results.NotFound(new { Message = "No interests found." });
 
             return Results.Json(result);
         }
@@ -44,7 +44,7 @@ namespace Mini_project_API.Handlers
 
             if (person.Interests == null)
                 // If person with provided Id has no interest
-                return Results.NotFound(new { Message = $"No interest found for person with ID: {person.Id}." } );
+                return Results.NotFound(new { Message = $"No interest found for person with ID: {person.Id}." });
 
             var interests = person.Interests
                                   .Select(i => new InterestPersonViewModel()
@@ -57,7 +57,7 @@ namespace Mini_project_API.Handlers
             if (interests.Length == 0)
             {
                 // Display if no interest with provided Id is found e.g. the returned array is empty
-                return Results.NotFound(new { Message = $"No interests found for person with ID: {personId}." } );
+                return Results.NotFound(new { Message = $"No interests found for person with ID: {personId}." });
             }
 
             return Results.Json(interests);
@@ -70,7 +70,7 @@ namespace Mini_project_API.Handlers
                 // Check if provided interest already exists
                 if (context.Interests.Any(i => i.Name == interestName.Name))
                 {
-                    return Results.Conflict(new { Error = $"Interest '{interestName.Name}' already exists." } );
+                    return Results.Conflict(new { Error = $"Interest '{interestName.Name}' already exists." });
                 }
 
                 context.Interests
@@ -82,7 +82,7 @@ namespace Mini_project_API.Handlers
 
                 context.SaveChanges();
 
-                return Results.Ok(new { Message = $"New interest '{interestName.Name}' successfully added." } );
+                return Results.Ok(new { Message = $"New interest '{interestName.Name}' successfully added." });
             }
             catch
             {
@@ -94,9 +94,7 @@ namespace Mini_project_API.Handlers
         {
             try
             {
-                var interest = context.Interests
-                                      .Where(i => i.Id == interestId)
-                                      .SingleOrDefault();
+                var interest = context.Interests.FirstOrDefault(i => i.Id == interestId);
 
                 if (interest == null)
                 {
@@ -105,26 +103,25 @@ namespace Mini_project_API.Handlers
                 }
 
                 var person = context.People
-                                    .Where(p => p.Id == personId)
                                     .Include(p => p.Interests)
-                                    .SingleOrDefault();
+                                    .FirstOrDefault(p => p.Id == personId);
 
                 if (person == null)
                 {
-                    // Display if no person or interest with provided Id is found
-                    return Results.NotFound(new { Message = $"Person with ID: {personId} not found." } );
+                    // Display if no person with provided Id is found
+                    return Results.NotFound(new { Message = $"Person with ID: {personId} not found." });
                 }
 
-                if (person.Interests.Contains(interest))
+                if (person.Interests.Any(i => i.Id == interestId))
                 {
-                    return Results.Conflict(new { Message = "Person already has that interest. Please choose another interest." } );
+                    // Display if person already has the interest
+                    return Results.Conflict(new { Message = $"{person.FirstName} {person.LastName} already has the interest '{interest.Name}'. Please choose another interest." });
                 }
 
                 person.Interests.Add(interest);
                 context.SaveChanges();
 
-                return Results.Ok(new { Message = $"Person with ID: {personId} successfully added to interest with ID: {interestId}" } );
-
+                return Results.Ok(new { Message = $"Interest '{interest.Name}' successfully added to {person.FirstName} {person.LastName}" });
             }
             catch
             {
@@ -143,7 +140,7 @@ namespace Mini_project_API.Handlers
 
                 if (person == null)
                 {
-                    return Results.NotFound(new { Message = $"No person with ID: {personId} found." } );
+                    return Results.NotFound(new { Message = $"No person with ID: {personId} found." });
                 }
 
                 var interest = context.Interests
@@ -152,7 +149,7 @@ namespace Mini_project_API.Handlers
 
                 if (interest == null)
                 {
-                    return Results.NotFound(new { Message = $"No interest with ID: {interestId} found." } );
+                    return Results.NotFound(new { Message = $"No interest with ID: {interestId} found." });
                 }
 
                 // Check if the person has the interest with the provided interestId
@@ -173,7 +170,7 @@ namespace Mini_project_API.Handlers
 
                 if (urlExists)
                 {
-                    return Results.BadRequest(new { Error = "The URL already exists for the chosen interest." } );
+                    return Results.BadRequest(new { Error = "The URL already exists for the chosen interest." });
                 }
 
                 context.InterestLinks
@@ -186,9 +183,9 @@ namespace Mini_project_API.Handlers
 
                 context.SaveChanges();
 
-                return Results.Ok(new { Message = $"New link {interestLink.Url} successfully added to person with ID: {personId}." } );
+                return Results.Ok(new { Message = $"New link {interestLink.Url} successfully added to person with ID: {personId}." });
             }
-            catch 
+            catch
             {
                 return Results.StatusCode((int)HttpStatusCode.InternalServerError);
             }

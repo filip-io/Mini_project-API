@@ -56,7 +56,7 @@ namespace Mini_project_API.Handlers
 
         public static IResult GetPeoplePagination(ApplicationContext context, int pageNumber, int pageSize)
         {
-            if (pageSize < 1) 
+            if (pageSize < 1)
             {
                 return Results.BadRequest(new { Error = $"Parameter 'pageSize' cannot be zero. Please choose a higher number." });
             }
@@ -97,7 +97,7 @@ namespace Mini_project_API.Handlers
 
             context.SaveChanges();
 
-            return Results.Ok(new { Message = "Person successfully added." } );
+            return Results.Ok(new { Message = "Person successfully added." });
         }
 
         public static IResult GetPersonInterestLinks(ApplicationContext context, int personId)
@@ -110,7 +110,7 @@ namespace Mini_project_API.Handlers
             if (result.Length < 1)
             {
                 // If no interests are found
-                return Results.NotFound( new { Message = "No links found." } );
+                return Results.NotFound(new { Message = "No links found." });
             }
 
             return Results.Json(result);
@@ -129,7 +129,7 @@ namespace Mini_project_API.Handlers
                 if (person == null)
                 {
                     // Display if no person or interest with provided Id is found
-                    return Results.NotFound(new { Message = $"Person with ID: {personId} not found." } );
+                    return Results.NotFound(new { Message = $"Person with ID: {personId} not found." });
                 }
 
                 var hierarchical = new PersonHierarchicalViewModel()
