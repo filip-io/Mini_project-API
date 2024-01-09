@@ -83,7 +83,7 @@ POST /interests
 Using JSON:
 {
 	"name": "Science",
-	"description": "Science is a rigorous, systematic endeavor that builds and organizes knowledge."
+	"description": "Science is the systematic study of the natural world."
 }
 ```
 <br>
