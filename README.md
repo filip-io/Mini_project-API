@@ -120,6 +120,6 @@ Replace *{personId}* with the desired persons ID and *{interestId}* with the int
 POST /people/{personId}/interests/{interestId}/addLink
 
 {
-	"Url": "https://en.wikipedia.org/wiki/Chemistry"
+	"url": "https://en.wikipedia.org/wiki/Chemistry"
 }
 ```
