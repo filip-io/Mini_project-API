@@ -143,9 +143,7 @@ namespace Mini_project_API.Handlers
                     return Results.NotFound(new { Message = $"No person with ID: {personId} found." });
                 }
 
-                var interest = context.Interests
-                                            .Where(i => i.Id == interestId)
-                                            .SingleOrDefault();
+                var interest = context.Interests.FirstOrDefault(i => i.Id == interestId);
 
                 if (interest == null)
                 {
@@ -157,7 +155,7 @@ namespace Mini_project_API.Handlers
                 {
                     return Results.BadRequest(new
                     {
-                        Message = $"Person with ID: {personId} does not have the interest with ID: {interestId}. " +
+                        Message = $"{person.FirstName} {person.LastName} does not have the interest '{interest.Name}'. " +
                                   $"Please add the interest to the person before adding the link."
                     });
                 }
@@ -170,7 +168,7 @@ namespace Mini_project_API.Handlers
 
                 if (urlExists)
                 {
-                    return Results.BadRequest(new { Error = "The URL already exists for the chosen interest." });
+                    return Results.BadRequest(new { Error = $"The URL already exists for interest '{interest.Name}" });
                 }
 
                 context.InterestLinks
@@ -183,7 +181,7 @@ namespace Mini_project_API.Handlers
 
                 context.SaveChanges();
 
-                return Results.Ok(new { Message = $"New link {interestLink.Url} successfully added to person with ID: {personId}." });
+                return Results.Ok(new { Message = $"New link {interestLink.Url} successfully added to {person.FirstName} {person.LastName}." });
             }
             catch
             {
