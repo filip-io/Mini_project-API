@@ -15,7 +15,7 @@ namespace Mini_project_API
 
             // Welcome message and instructions
             app.MapGet("/", () => "Welcome to The Interests API!" +
-            "\n\nPlease see README for documentation on how to use this API here: https://github.com/filip-io/Mini_project-API");
+            "\n\nPlease check README for instructions on how to use this API: https://github.com/filip-io/Mini_project-API");
 
             // People
             app.MapPost("/people/search", PeopleHandler.GetPeople);
