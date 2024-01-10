@@ -31,8 +31,9 @@ Leave request body empty to see all people.
 ```
 POST /people/
 
+Using JSON:
 {
-	"search":"jo" // if person first name is e.g. "John"
+	"search":"jo"
 }
 ```
 <br>
