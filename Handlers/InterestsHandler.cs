@@ -64,26 +64,26 @@ namespace Mini_project_API.Handlers
             return Results.Json(interests);
         }
 
-        public static IResult AddInterest(ApplicationContext context, InterestDto interestName)
+        public static IResult AddInterest(ApplicationContext context, InterestDto interestDto)
         {
             try
             {
                 // Check if provided interest already exists
-                if (context.Interests.Any(i => i.Name == interestName.Name))
+                if (context.Interests.Any(i => i.Name == interestDto.Name))
                 {
-                    return Results.Conflict(new { Error = $"Interest '{interestName.Name}' already exists." });
+                    return Results.Conflict(new { Error = $"Interest '{interestDto.Name}' already exists." });
                 }
 
                 context.Interests
                        .Add(new Interest()
                        {
-                           Name = interestName.Name,
-                           Description = interestName.Description,
+                           Name = interestDto.Name,
+                           Description = interestDto.Description,
                        });
 
                 context.SaveChanges();
 
-                return Results.Ok(new { Message = $"New interest '{interestName.Name}' successfully added." });
+                return Results.Ok(new { Message = $"New interest '{interestDto.Name}' successfully added." });
             }
             catch
             {
@@ -130,7 +130,7 @@ namespace Mini_project_API.Handlers
             }
         }
 
-        public static IResult AddInterestLink(ApplicationContext context, int personId, int interestId, InterestLinkDto interestLink)
+        public static IResult AddInterestLink(ApplicationContext context, int personId, int interestId, InterestLinkDto interestLinkDto)
         {
             try
             {   // Get the person and it's interests
@@ -168,7 +168,7 @@ namespace Mini_project_API.Handlers
                                                && u.Interest != null
                                                && u.Person.Id == personId
                                                && u.Interest.Id == interestId
-                                               && u.Url == interestLink.Url);
+                                               && u.Url == interestLinkDto.Url);
 
                 if (urlExists)
                 {
@@ -178,14 +178,14 @@ namespace Mini_project_API.Handlers
                 context.InterestLinks
                     .Add(new InterestLink()
                     {
-                        Url = interestLink.Url,
+                        Url = interestLinkDto.Url,
                         Interest = interest,
                         Person = person
                     });
 
                 context.SaveChanges();
 
-                return Results.Ok(new { Message = $"New link {interestLink.Url} successfully added to {person.FirstName} {person.LastName}." });
+                return Results.Ok(new { Message = $"New link {interestLinkDto.Url} successfully added to {person.FirstName} {person.LastName}." });
             }
             catch
             {

@@ -10,14 +10,14 @@ namespace Mini_project_API.Handlers
 {
     public class PeopleHandler
     {
-        public static IResult GetPeople(ApplicationContext context, SearchDto? userQuery)
+        public static IResult GetPeople(ApplicationContext context, SearchDto? searchDto)
         {
             try
             {
-                if (userQuery != null)
+                if (searchDto != null)
                 {
                     // Filter results by provided string from user
-                    return UseSearch(context, userQuery);
+                    return UseSearch(context, searchDto);
                 }
 
                 PeopleViewModel[] unfilteredResult =
@@ -44,18 +44,18 @@ namespace Mini_project_API.Handlers
         }
 
 
-        private static IResult UseSearch(ApplicationContext context, SearchDto userQuery)
+        private static IResult UseSearch(ApplicationContext context, SearchDto searchDto)
         {
             try
             {
-                if (userQuery?.Search == null || userQuery.Search.Length != 2 || !userQuery.Search.All(char.IsLetter))
+                if (searchDto?.Search == null || searchDto.Search.Length != 2 || !searchDto.Search.All(char.IsLetter))
                 {
                     return Results.BadRequest(new { Error = "Invalid search. Please provide two letters only." });
                 }
 
                 PeopleViewModel[] filteredResult =
                     context.People
-                           .Where(p => p.FirstName.StartsWith(userQuery.Search))
+                           .Where(p => p.FirstName.StartsWith(searchDto.Search))
                            .Select(p => new PeopleViewModel
                            {
                                Id = p.Id,
@@ -65,7 +65,7 @@ namespace Mini_project_API.Handlers
 
                 if (filteredResult.Length < 1)
                 {
-                    return Results.NotFound(new { Message = $"No person with first name that begins with '{userQuery.Search}' found. Please try again." });
+                    return Results.NotFound(new { Message = $"No person with first name that begins with '{searchDto.Search}' found. Please try again." });
                 }
 
                 return Results.Json(filteredResult);
@@ -116,15 +116,15 @@ namespace Mini_project_API.Handlers
         }
 
 
-        public static IResult AddPerson(ApplicationContext context, PersonDto person)
+        public static IResult AddPerson(ApplicationContext context, PersonDto personDto)
         {
             try
             {
                 context.People.Add(new Person()
                 {
-                    FirstName = person.FirstName,
-                    LastName = person.LastName,
-                    PhoneNumber = person.PhoneNumber
+                    FirstName = personDto.FirstName,
+                    LastName = personDto.LastName,
+                    PhoneNumber = personDto.PhoneNumber
                 });
 
                 context.SaveChanges();
