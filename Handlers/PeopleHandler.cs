@@ -20,7 +20,8 @@ namespace Mini_project_API.Handlers
                     return UseSearch(context, userQuery);
                 }
 
-                PeopleViewModel[] unfilteredResult = context.People
+                PeopleViewModel[] unfilteredResult =
+                 context.People
                         .Select(p => new PeopleViewModel()
                         {
                             Id = p.Id,
@@ -142,9 +143,9 @@ namespace Mini_project_API.Handlers
             try
             {
                 string[] result = context.InterestLinks
-                                    .Where(il => il.Person.Id == personId)
-                                    .Select(il => il.Url)
-                                    .ToArray();
+                                         .Where(il => il.Person.Id == personId)
+                                         .Select(il => il.Url)
+                                         .ToArray();
 
                 if (result.Length < 1)
                 {

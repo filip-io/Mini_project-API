@@ -75,11 +75,11 @@ namespace Mini_project_API.Handlers
                 }
 
                 context.Interests
-                    .Add(new Interest()
-                    {
-                        Name = interestName.Name,
-                        Description = interestName.Description,
-                    });
+                       .Add(new Interest()
+                       {
+                           Name = interestName.Name,
+                           Description = interestName.Description,
+                       });
 
                 context.SaveChanges();
 
@@ -104,8 +104,8 @@ namespace Mini_project_API.Handlers
                 }
 
                 Person? person = context.People
-                                    .Include(p => p.Interests)
-                                    .FirstOrDefault(p => p.Id == personId);
+                                        .Include(p => p.Interests)
+                                        .FirstOrDefault(p => p.Id == personId);
 
                 if (person == null)
                 {
@@ -164,11 +164,11 @@ namespace Mini_project_API.Handlers
                 /* Check if provided URL already exists for the specific person and interest    
                  * Null check to remove warning 'CS8602 - Dereference of a possibly null reference'. */
                 bool urlExists = context.InterestLinks
-                                      .Any(u => u.Person != null
-                                             && u.Interest != null
-                                             && u.Person.Id == personId
-                                             && u.Interest.Id == interestId
-                                             && u.Url == interestLink.Url);
+                                        .Any(u => u.Person != null
+                                               && u.Interest != null
+                                               && u.Person.Id == personId
+                                               && u.Interest.Id == interestId
+                                               && u.Url == interestLink.Url);
 
                 if (urlExists)
                 {
