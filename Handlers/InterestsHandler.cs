@@ -15,12 +15,12 @@ namespace Mini_project_API.Handlers
         {
             InterestPersonViewModel[] result =
                 context.Interests
-                .Select(i => new InterestPersonViewModel()
-                {
-                    Name = i.Name,
-                    Description = i.Description,
-                })
-                .ToArray();
+                       .Select(i => new InterestPersonViewModel()
+                       {
+                           Name = i.Name,
+                           Description = i.Description,
+                       })
+                       .ToArray();
 
             if (result.Length < 1)
                 // If no interests are found
@@ -31,10 +31,10 @@ namespace Mini_project_API.Handlers
 
         public static IResult GetPersonInterests(ApplicationContext context, int personId)
         {
-            var person = context.People
-                                .Where(p => p.Id == personId)
-                                .Include(p => p.Interests)
-                                .FirstOrDefault();
+            Person? person = context.People
+                                    .Where(p => p.Id == personId)
+                                    .Include(p => p.Interests)
+                                    .FirstOrDefault();
 
             if (person == null)
             {
@@ -46,13 +46,14 @@ namespace Mini_project_API.Handlers
                 // If person with provided Id has no interest
                 return Results.NotFound(new { Message = $"No interest found for person with ID: {person.Id}." });
 
-            var interests = person.Interests
-                                  .Select(i => new InterestPersonViewModel()
-                                  {
-                                      Name = i.Name,
-                                      Description = i.Description,
-                                  })
-                                  .ToArray();
+            InterestPersonViewModel[] interests =
+                person.Interests
+                      .Select(i => new InterestPersonViewModel()
+                      {
+                          Name = i.Name,
+                          Description = i.Description,
+                      })
+                      .ToArray();
 
             if (interests.Length == 0)
             {
@@ -94,7 +95,7 @@ namespace Mini_project_API.Handlers
         {
             try
             {
-                var interest = context.Interests.FirstOrDefault(i => i.Id == interestId);
+                Interest? interest = context.Interests.FirstOrDefault(i => i.Id == interestId);
 
                 if (interest == null)
                 {
@@ -102,7 +103,7 @@ namespace Mini_project_API.Handlers
                     return Results.NotFound($"Interest with ID: {interestId} not found.");
                 }
 
-                var person = context.People
+                Person? person = context.People
                                     .Include(p => p.Interests)
                                     .FirstOrDefault(p => p.Id == personId);
 
@@ -133,17 +134,17 @@ namespace Mini_project_API.Handlers
         {
             try
             {   // Get the person and it's interests
-                var person = context.People
-                                    .Where(p => p.Id == personId)
-                                    .Include(p => p.Interests)
-                                    .SingleOrDefault();
+                Person? person = context.People
+                                        .Where(p => p.Id == personId)
+                                        .Include(p => p.Interests)
+                                        .FirstOrDefault();
 
                 if (person == null)
                 {
                     return Results.NotFound(new { Message = $"No person with ID: {personId} found." });
                 }
 
-                var interest = context.Interests.FirstOrDefault(i => i.Id == interestId);
+                Interest? interest = context.Interests.FirstOrDefault(i => i.Id == interestId);
 
                 if (interest == null)
                 {
@@ -160,11 +161,14 @@ namespace Mini_project_API.Handlers
                     });
                 }
 
-                // Check if provided URL already exists for the specific person and interest
-                var urlExists = context.InterestLinks
-                                       .Any(u => u.Person.Id == personId
-                                              && u.Interest.Id == interestId
-                                              && u.Url == interestLink.Url);
+                /* Check if provided URL already exists for the specific person and interest    
+                 * Null check to remove warning 'CS8602 - Dereference of a possibly null reference'. */
+                bool urlExists = context.InterestLinks
+                                      .Any(u => u.Person != null
+                                             && u.Interest != null
+                                             && u.Person.Id == personId
+                                             && u.Interest.Id == interestId
+                                             && u.Url == interestLink.Url);
 
                 if (urlExists)
                 {
