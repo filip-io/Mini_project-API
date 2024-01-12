@@ -26,8 +26,8 @@ Graphical representation of the structure, behaviors and interactions.
 
 
 #### **Get all people in the database** 
-Leave request body empty to see all people. 
-<br>To narrow down your results, add the first two letters of the persons first name.
+To narrow down your results, add the first two letters of the persons first name. 
+<br> Leave request body empty to see all people. 
 ```
 POST /people/
 
@@ -36,6 +36,12 @@ Using JSON:
 	"search":"jo"
 }
 ```
+<img src="/Images/Get_all_people_search_ex.jpg" width="33%"> <img src="/Images/Get_people_search.jpg" width="33%">
+<br>
+```
+POST /people/
+```
+<img src="/Images/Get_all_people.jpg" width="33%">
 <br>
 
 #### **Pagination** 
@@ -43,6 +49,7 @@ Replace *{pageNumber}* and *{pageSize}* with your desired choices.
 ```
 GET /people/pageNumber/{pageNumber}/pageSize/{pageSize}
 ```
+<img src="/Images/Get_pagination.jpg" width="33%">
 
 <br>
 
@@ -51,6 +58,7 @@ Replace *{personId}* with ID of the person you want to see all info about. Retur
 ```
 GET /people/{personId}/hierarchical
 ```
+<img src="/Images/Get_hierarchical.jpg" width="33%">
 
 <br>
 
@@ -66,6 +74,7 @@ Using JSON:
 	"phoneNumber": "0705456267"
 }
 ```
+<img src="/Images/Post_add_person.jpg" width="33%">
 
 <br>
 
@@ -74,6 +83,8 @@ Using JSON:
 ```
 GET /interests
 ```
+<img src="/Images/Get_all_interests.jpg" width="33%">
+
 <br>
 
 #### **Add interest to the database**
@@ -87,6 +98,8 @@ Using JSON:
 	"description": "Science is the systematic study of the natural world."
 }
 ```
+<img src="/Images/Post_add_interest.jpg" width="33%">
+
 <br>
 
 #### **Get a specific persons interests**
@@ -94,6 +107,8 @@ Replace *{personId}* with the desired persons ID.
 ```
 GET /interests/{personId}
 ```
+<img src="/Images/Get_specific_person_interests.jpg" width="33%">
+
 <br>
 
 
@@ -102,6 +117,7 @@ Replace *{personId}* with the desired persons ID and *{interestId}* with the int
 ```
 POST /people/{personId}/interests/{interestId}
 ```
+<img src="/Images/Post_new_interest.jpg" width="33%">
 
 <br>
 
@@ -110,7 +126,7 @@ POST /people/{personId}/interests/{interestId}
 ```
 GET /people/{personId}/interests
 ```
-
+<img src="/Images/Get_all_links_specific_person.jpg" width="33%">
 
 <br>
 
@@ -120,7 +136,9 @@ Replace *{personId}* with the desired persons ID and *{interestId}* with the int
 ```
 POST /people/{personId}/interests/{interestId}/addLink
 
+Using JSON:
 {
 	"url": "https://en.wikipedia.org/wiki/Chemistry"
 }
 ```
+<img src="/Images/Post_add_new_link.jpg" width="33%">
