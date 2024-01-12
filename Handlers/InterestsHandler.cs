@@ -46,7 +46,7 @@ namespace Mini_project_API.Handlers
                 // If person with provided Id has no interest
                 return Results.NotFound(new { Message = $"No interest found for person with ID: {person.Id}." });
 
-            InterestPersonViewModel[] interests =
+            InterestPersonViewModel[] personInterests =
                 person.Interests
                       .Select(i => new InterestPersonViewModel()
                       {
@@ -55,13 +55,7 @@ namespace Mini_project_API.Handlers
                       })
                       .ToArray();
 
-            if (interests.Length == 0)
-            {
-                // Display if no interest with provided Id is found e.g. the returned array is empty
-                return Results.NotFound(new { Message = $"No interests found for person with ID: {personId}." });
-            }
-
-            return Results.Json(interests);
+            return Results.Json(personInterests);
         }
 
         public static IResult AddInterest(ApplicationContext context, InterestDto interestDto)
