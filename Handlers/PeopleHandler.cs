@@ -50,7 +50,7 @@ namespace Mini_project_API.Handlers
             {
                 if (searchDto?.Search == null || searchDto.Search.Length != 2 || !searchDto.Search.All(char.IsLetter))
                 {
-                    return Results.BadRequest(new { Error = "Invalid search. Please provide two letters only." });
+                    return Results.BadRequest(new { Error = "Invalid search. Please check that you are using the correct search format and provide two letters only." });
                 }
 
                 PeopleViewModel[] filteredResult =

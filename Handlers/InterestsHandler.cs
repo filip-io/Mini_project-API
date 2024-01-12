@@ -13,10 +13,11 @@ namespace Mini_project_API.Handlers
     {
         public static IResult GetInterests(ApplicationContext context)
         {
-            InterestPersonViewModel[] result =
+            InterestViewModel[] result =
                 context.Interests
-                       .Select(i => new InterestPersonViewModel()
+                       .Select(i => new InterestViewModel()
                        {
+                           Id = i.Id,
                            Name = i.Name,
                            Description = i.Description,
                        })
@@ -42,14 +43,15 @@ namespace Mini_project_API.Handlers
                 return Results.NotFound(new { Message = $"No person with ID: {personId} found." });
             }
 
-            if (person.Interests == null)
+            if (person.Interests == null || !person.Interests.Any())
                 // If person with provided Id has no interest
                 return Results.NotFound(new { Message = $"No interest found for person with ID: {person.Id}." });
 
-            InterestPersonViewModel[] personInterests =
+            InterestViewModel[] personInterests =
                 person.Interests
-                      .Select(i => new InterestPersonViewModel()
+                      .Select(i => new InterestViewModel()
                       {
+                          Id = i.Id,
                           Name = i.Name,
                           Description = i.Description,
                       })
