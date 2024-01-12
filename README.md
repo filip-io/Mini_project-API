@@ -122,7 +122,7 @@ POST /people/{personId}/interests/{interestId}
 <br>
 
 #### **Get all links connected to a specific person**
-<br>Replace *{personId}* with the desired persons ID.
+Replace *{personId}* with the desired persons ID.
 ```
 GET /people/{personId}/interests
 ```
