@@ -33,7 +33,7 @@ POST /people/
 
 Using JSON:
 {
-	"search":"jo"
+	"search":"wa"
 }
 ```
 <img src="/Images/Get_all_people_search_ex.jpg" width="33%"> <img src="/Images/Get_people_search.jpg" width="33%">
