@@ -94,8 +94,8 @@ POST /interests
 
 Using JSON:
 {
-	"name": "Science",
-	"description": "Science is the systematic study of the natural world."
+	"name": "HiFi",
+	"description": "High fidelity is the high-quality reproduction of sound."
 }
 ```
 <img src="/Images/Post_add_interest.jpg" width="33%">
