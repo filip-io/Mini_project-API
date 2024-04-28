@@ -29,7 +29,7 @@ Graphical representation of the structure, behaviors and interactions.
 To narrow down your results, add the first two letters of the persons first name. 
 <br> Leave request body empty to see all people. 
 ```
-POST /people/
+POST /people/search/
 
 Using JSON:
 {

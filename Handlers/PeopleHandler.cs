@@ -31,7 +31,7 @@ namespace Mini_project_API.Handlers
 
                 if (unfilteredResult.Length < 1)
                 {
-                    // If no interests are found
+                    // If no people are found
                     return Results.NotFound("No people found.");
                 }
 
